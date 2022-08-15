@@ -29,8 +29,8 @@ myConfig = def
     --, layoutHook = myLayout
     , terminal = "kitty"
     , borderWidth = 8
-    , normalBorderColor = "#800080"
-    , focusedBorderColor = "#FF00FF"
+    , normalBorderColor = "#e28743"
+    , focusedBorderColor = "#1e81b0"
     }
    `additionalKeysP`
     [ ("<XF86AudioMute>",  spawn "amixer set Master toggle")
