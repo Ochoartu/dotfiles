@@ -20,7 +20,7 @@ main :: IO ()
 main = xmonad
      . ewmhFullscreen
      . ewmh
-     . withEasySB (statusBarProp "xmobar" (pure myXmobarPP)) defToggleStrutsKey
+     . withEasySB (statusBarProp "polybar" (pure myPolybarPP)) defToggleStrutsKey
      $ myConfig
 
 myConfig = def
@@ -46,8 +46,9 @@ myStartupHook = do
     spawnOnce "picom -b &"
     spawnOnce "nitrogen --restore"
 
-myXmobarPP :: PP
-myXmobarPP = def
+myPolybarPP :: PP
+myPolybarPP = def
 
 myWorkspaces = ["1","2","3","4","5","6"]
+
 
