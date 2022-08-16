@@ -1,4 +1,5 @@
 import XMonad
+import System.IO
 import Graphics.X11.ExtraTypes.XF86
 import XMonad.Layout.IndependentScreens
 
@@ -17,16 +18,18 @@ import XMonad.Hooks.StatusBar.PP
 import XMonad.Layout.IndependentScreens
 
 main :: IO ()
-main = xmonad
+main = do 
+       xmonad 
+     . docks
      . ewmhFullscreen
      . ewmh
-     . withEasySB (statusBarProp "xmobar" (pure myXmobarPP)) defToggleStrutsKey
+     . withSB ( xmobar0 <> xmobar1 <> xmobar2)  
      $ myConfig
 
 myConfig = def
     { workspaces =  ["un","deux","trois","quatre","cinq","six"]
     , modMask = mod1Mask
-    --, layoutHook = myLayout
+    , layoutHook = myLayout
     , terminal = "kitty"
     , borderWidth = 8
     , normalBorderColor = "#e28743"
@@ -40,14 +43,33 @@ myConfig = def
     , ("<XF86MonBrightnessDown>", spawn "lux -s 10%")
     ]
 
+xmobar0 = statusBarPropTo "_XMONAD_LOG_1" "xmobar -x 0" (pure ppOne) 
+xmobar1 = statusBarPropTo "_XMONAD_LOG_2" "xmobar -x 1" (pure ppTwo) 
+xmobar2 = statusBarPropTo "_XMONAD_LOG_3" "xmobar -x 2" (pure ppThree) 
 
 myStartupHook :: X ()
 myStartupHook = do
     spawnOnce "picom -b &"
     spawnOnce "nitrogen --restore"
 
-myXmobarPP :: PP
-myXmobarPP = def
 
 myWorkspaces = ["1","2","3","4","5","6"]
+
+myLayout = avoidStruts (tiled ||| Mirror tiled ||| Full)
+  where
+    tiled   = Tall nmaster delta ratio
+    nmaster = 1      -- Default number of windows in the master pane
+    ratio   = 1/2    -- Default proportion of screen occupied by master pane
+    delta   = 3/100  -- Percent of screen to increment by when resizing panes
+
+
+
+ppOne :: PP
+ppOne = def
+
+ppTwo :: PP
+ppTwo = def
+
+ppThree :: PP
+ppThree = def
 
