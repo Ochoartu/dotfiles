@@ -34,6 +34,7 @@ myConfig = def
     , borderWidth = 8
     , normalBorderColor = "#e28743"
     , focusedBorderColor = "#1e81b0"
+    , logHook = dynamicLogString ppThree >>= xmonadPropLog
     }
    `additionalKeysP`
     [ ("<XF86AudioMute>",  spawn "amixer set Master toggle")
@@ -72,4 +73,3 @@ ppTwo = def
 
 ppThree :: PP
 ppThree = def
-
