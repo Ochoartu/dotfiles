@@ -37,7 +37,7 @@ myConfig = def
     , logHook = dynamicLogString ppThree >>= xmonadPropLog
     }
    `additionalKeysP`
-    [ ("<XF86AudioMute>",  spawn "amixer set Master toggle")
+    [ ("<XF86AudioMute>",  spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
     , ("<XF86AudioLowerVolume>",  spawn "pactl -- set-sink-volume 0 -05%")
     , ("<XF86AudioRaiseVolume>",  spawn "pactl -- set-sink-volume 0 +05%")
     , ("<XF86MonBrightnessUp>", spawn "lux -a 10%")
