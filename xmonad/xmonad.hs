@@ -35,6 +35,7 @@ myConfig = def
     , normalBorderColor = "#e28743"
     , focusedBorderColor = "#1e81b0"
     , logHook = dynamicLogString ppThree >>= xmonadPropLog
+    , startupHook = myStartupHook
     }
    `additionalKeysP`
     [ ("<XF86AudioMute>",  spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
