@@ -15,7 +15,7 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
 
-import XMonad.Layout.IndependentScreens
+import XMonad.Layout.Spacing
 
 main :: IO ()
 main = do 
@@ -29,11 +29,11 @@ main = do
 myConfig = def
     { workspaces =  ["un","deux","trois","quatre","cinq","six"]
     , modMask = mod1Mask
-    , layoutHook = myLayout
+    , layoutHook = spacingWithEdge 10 $ myLayout
     , terminal = "kitty"
-    , borderWidth = 8
-    , normalBorderColor = "#e28743"
-    , focusedBorderColor = "#1e81b0"
+    , borderWidth = 6 
+    , normalBorderColor = "#800080"
+    , focusedBorderColor = "#FF00FF"
     , logHook = dynamicLogString ppThree >>= xmonadPropLog
     , startupHook = myStartupHook
     }
