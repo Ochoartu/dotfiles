@@ -103,24 +103,44 @@ ppThree = def
 scratchpads :: NamedScratchpads
 scratchpads = [ NS "terminal" spawnTerm findTerm manageTerm
               , NS "arandr"  spawnArandr findArandr manageArandr 
-	      , NS "nitrogen" spawnNitrogen findNitrogen manageNitrogen]
+	      , NS "nitrogen" spawnNitrogen findNitrogen manageNitrogen
+	      , NS "calculator" spawnCalc findCalc manageCalc]
   where
   spawnTerm = "st" ++ " -n scratchpad"
   findTerm  = resource =? "scratchpad"
-  manageTerm = defaultFloating
+  manageTerm = customFloating $ F.RationalRect l t w h
+             where
+	     h = 0.5
+	     w = 0.4
+	     t = 0.75 -h
+	     l = 0.70 -w
 
   spawnArandr = "arandr"
-  findArandr = title =? "Arandr"
+  findArandr = className =? "Arandr"
   manageArandr = customFloating $ F.RationalRect l t w h
              where
-	     h = 1
-	     w = 1
-	     t = 0.95 -h
-	     l = 0.95 -w
+	     h = 0.5
+	     w = 0.4
+	     t = 0.75 -h
+	     l = 0.70 -w
 
   spawnNitrogen = "nitrogen"
-  findNitrogen = title =? "Nitrogen"
-  manageNitrogen = defaultFloating
+  findNitrogen = className =? "Nitrogen"
+  manageNitrogen = customFloating $ F.RationalRect l t w h
+             where 
+	     h = 0.5
+	     w = 0.4
+	     t = 0.75 -h
+	     l = 0.70 -w
+
+  spawnCalc = "qalculate-gtk"
+  findCalc = className =? "Qalculate-gtk"
+  manageCalc = customFloating $ F.RationalRect l t w h
+             where
+	     h = 0.5
+	     w = 0.4
+	     t = 0.75 -h
+	     l = 0.70 -w
   
 myKeys :: XConfig l0 -> [((KeyMask,KeySym), NamedAction)]
 myKeys c = (subtitle "Custom Keys":) $ mkNamedKeymap c $
@@ -132,5 +152,6 @@ myKeys c = (subtitle "Custom Keys":) $ mkNamedKeymap c $
      , ("M-C-o", addName "Toggle scratchpad Terminal" $ namedScratchpadAction scratchpads "terminal")
      , ("M-C-l", addName "Toggle scratchpad Arandr" $ namedScratchpadAction scratchpads "arandr")
      , ("M-C-p", addName "Wallpaper" $ namedScratchpadAction scratchpads "nitrogen")
+     , ("M-C-i", addName "Calculator" $ namedScratchpadAction scratchpads "calculator")
      ]
 
