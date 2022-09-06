@@ -64,7 +64,7 @@ myLayout = avoidStruts (tiled ||| Mirror tiled ||| Full)
     delta   = 3/100  -- Percent of screen to increment by when resizing panes
 
 myTerminal :: String
-myTerminal = "st"
+myTerminal = "kitty"
 
 ppOne :: PP
 ppOne = def
@@ -101,11 +101,26 @@ ppThree = def
     lowWhite = xmobarColor "#bbbbbb" ""
 
 scratchpads :: NamedScratchpads
-scratchpads = [ NS "terminal" spawnTerm findTerm manageTerm]
+scratchpads = [ NS "terminal" spawnTerm findTerm manageTerm
+              , NS "arandr"  spawnArandr findArandr manageArandr 
+	      , NS "nitrogen" spawnNitrogen findNitrogen manageNitrogen]
   where
-  spawnTerm = myTerminal ++ " -n scratchpad"
+  spawnTerm = "st" ++ " -n scratchpad"
   findTerm  = resource =? "scratchpad"
   manageTerm = defaultFloating
+
+  spawnArandr = "arandr"
+  findArandr = title =? "Arandr"
+  manageArandr = customFloating $ F.RationalRect l t w h
+             where
+	     h = 1
+	     w = 1
+	     t = 0.95 -h
+	     l = 0.95 -w
+
+  spawnNitrogen = "nitrogen"
+  findNitrogen = title =? "Nitrogen"
+  manageNitrogen = defaultFloating
   
 myKeys :: XConfig l0 -> [((KeyMask,KeySym), NamedAction)]
 myKeys c = (subtitle "Custom Keys":) $ mkNamedKeymap c $
@@ -115,5 +130,7 @@ myKeys c = (subtitle "Custom Keys":) $ mkNamedKeymap c $
      , ("<XF86MonBrightnessUp>", addName "Light it up" $ spawn "lux -a 10%")
      , ("<XF86MonBrightnessDown>", addName "Light it down" $ spawn "lux -s 10%")
      , ("M-C-o", addName "Toggle scratchpad Terminal" $ namedScratchpadAction scratchpads "terminal")
+     , ("M-C-l", addName "Toggle scratchpad Arandr" $ namedScratchpadAction scratchpads "arandr")
+     , ("M-C-p", addName "Wallpaper" $ namedScratchpadAction scratchpads "nitrogen")
      ]
 
