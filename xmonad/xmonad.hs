@@ -1,13 +1,16 @@
-import XMonad
+import XMonad 
+import XMonad.StackSet as F 
 import System.IO
 import Graphics.X11.ExtraTypes.XF86
 import XMonad.Layout.IndependentScreens
-
-import XMonad.Util.EZConfig (additionalKeysP)
+import qualified Data.Map as M
+import XMonad.Util.EZConfig (additionalKeysP, mkNamedKeymap)
 import XMonad.Util.Ungrab
 import XMonad.Util.SpawnOnce
 import XMonad.Util.Run
 import XMonad.Util.Loggers
+import XMonad.Util.NamedScratchpad
+import XMonad.Util.NamedActions
 
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
@@ -23,27 +26,22 @@ main = do
      . docks
      . ewmhFullscreen
      . ewmh
-     . withSB ( xmobar0 <> xmobar1 <> xmobar2)  
+     . withSB ( xmobar0 <> xmobar1 <> xmobar2)
+     . addDescrKeys ((mod4Mask, xK_F1), xMessage) myKeys
      $ myConfig
 
 myConfig = def
-    { workspaces =  ["un","deux","trois","quatre","cinq","six"]
-    , modMask = mod1Mask
-    , layoutHook = spacingWithEdge 10 $ myLayout
-    , terminal = "kitty"
+    { 
+      modMask = mod1Mask
+    , layoutHook = spacingWithEdge 10  myLayout
+    , terminal = myTerminal 
     , borderWidth = 6 
     , normalBorderColor = "#800080"
     , focusedBorderColor = "#FF00FF"
     , logHook = dynamicLogString ppThree >>= xmonadPropLog
     , startupHook = myStartupHook
+    , manageHook = namedScratchpadManageHook scratchpads
     }
-   `additionalKeysP`
-    [ ("<XF86AudioMute>",  spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
-    , ("<XF86AudioLowerVolume>",  spawn "pactl -- set-sink-volume 0 -05%")
-    , ("<XF86AudioRaiseVolume>",  spawn "pactl -- set-sink-volume 0 +05%")
-    , ("<XF86MonBrightnessUp>", spawn "lux -a 10%")
-    , ("<XF86MonBrightnessDown>", spawn "lux -s 10%")
-    ]
 
 xmobar0 = statusBarPropTo "_XMONAD_LOG_1" "xmobar -x 0" (pure ppOne) 
 xmobar1 = statusBarPropTo "_XMONAD_LOG_2" "xmobar -x 1" (pure ppTwo) 
@@ -53,9 +51,10 @@ myStartupHook :: X ()
 myStartupHook = do
     spawnOnce "picom -b &"
     spawnOnce "nitrogen --restore"
+    spawnOnce "/usr/bin/emacs --daemon"
 
-
-myWorkspaces = ["1","2","3","4","5","6"]
+myWorkspaces = ["un","deux","trois","quatre","cinq","six"]
+myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..] 
 
 myLayout = avoidStruts (tiled ||| Mirror tiled ||| Full)
   where
@@ -64,7 +63,8 @@ myLayout = avoidStruts (tiled ||| Mirror tiled ||| Full)
     ratio   = 1/2    -- Default proportion of screen occupied by master pane
     delta   = 3/100  -- Percent of screen to increment by when resizing panes
 
-
+myTerminal :: String
+myTerminal = "st"
 
 ppOne :: PP
 ppOne = def
@@ -99,3 +99,21 @@ ppThree = def
     yellow   = xmobarColor "#f1fa8c" ""
     red      = xmobarColor "#ff5555" ""
     lowWhite = xmobarColor "#bbbbbb" ""
+
+scratchpads :: NamedScratchpads
+scratchpads = [ NS "terminal" spawnTerm findTerm manageTerm]
+  where
+  spawnTerm = myTerminal ++ " -n scratchpad"
+  findTerm  = resource =? "scratchpad"
+  manageTerm = defaultFloating
+  
+myKeys :: XConfig l0 -> [((KeyMask,KeySym), NamedAction)]
+myKeys c = (subtitle "Custom Keys":) $ mkNamedKeymap c $
+     [ ("<XF86AudioMute>", addName "Silence" $ spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
+     , ("<XF86AudioLowerVolume>", addName "Lower Volume" $  spawn "pactl -- set-sink-volume 0 -05%")
+     , ("<XF86AudioRaiseVolume>", addName "Raise Volume" $ spawn "pactl -- set-sink-volume 0 +05%")
+     , ("<XF86MonBrightnessUp>", addName "Light it up" $ spawn "lux -a 10%")
+     , ("<XF86MonBrightnessDown>", addName "Light it down" $ spawn "lux -s 10%")
+     , ("M-C-o", addName "Toggle scratchpad Terminal" $ namedScratchpadAction scratchpads "terminal")
+     ]
+
