@@ -104,7 +104,8 @@ scratchpads :: NamedScratchpads
 scratchpads = [ NS "terminal" spawnTerm findTerm manageTerm
               , NS "arandr"  spawnArandr findArandr manageArandr 
 	      , NS "nitrogen" spawnNitrogen findNitrogen manageNitrogen
-	      , NS "calculator" spawnCalc findCalc manageCalc]
+	      , NS "calculator" spawnCalc findCalc manageCalc
+	      , NS "music" spawnMusic findMusic manageMusic]
   where
   spawnTerm = "st" ++ " -n scratchpad"
   findTerm  = resource =? "scratchpad"
@@ -141,7 +142,16 @@ scratchpads = [ NS "terminal" spawnTerm findTerm manageTerm
 	     w = 0.4
 	     t = 0.75 -h
 	     l = 0.70 -w
-  
+
+  spawnMusic = "cider"
+  findMusic = className =? "Cider"
+  manageMusic = customFloating $ F.RationalRect l t w h
+             where
+	     h = 0.5
+	     w = 0.4
+	     t = 0.75 -h
+	     l = 0.70 -w
+
 myKeys :: XConfig l0 -> [((KeyMask,KeySym), NamedAction)]
 myKeys c = (subtitle "Custom Keys":) $ mkNamedKeymap c $
      [ ("<XF86AudioMute>", addName "Silence" $ spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
@@ -153,5 +163,6 @@ myKeys c = (subtitle "Custom Keys":) $ mkNamedKeymap c $
      , ("M-C-l", addName "Toggle scratchpad Arandr" $ namedScratchpadAction scratchpads "arandr")
      , ("M-C-p", addName "Wallpaper" $ namedScratchpadAction scratchpads "nitrogen")
      , ("M-C-i", addName "Calculator" $ namedScratchpadAction scratchpads "calculator")
+     , ("M-C-m", addName "Music" $ namedScratchpadAction scratchpads "music")
      ]
 
