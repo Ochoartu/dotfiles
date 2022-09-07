@@ -1,5 +1,5 @@
 import XMonad 
-import XMonad.StackSet as F 
+import qualified XMonad.StackSet as F 
 import System.IO
 import Graphics.X11.ExtraTypes.XF86
 import XMonad.Layout.IndependentScreens
@@ -35,7 +35,8 @@ myConfig = def
       modMask = mod1Mask
     , layoutHook = spacingWithEdge 10  myLayout
     , terminal = myTerminal 
-    , borderWidth = 6 
+    , borderWidth = 6
+    , workspaces = myWorkspaces
     , normalBorderColor = "#800080"
     , focusedBorderColor = "#FF00FF"
     , logHook = dynamicLogString ppThree >>= xmonadPropLog
@@ -54,7 +55,7 @@ myStartupHook = do
     spawnOnce "/usr/bin/emacs --daemon"
 
 myWorkspaces = ["un","deux","trois","quatre","cinq","six"]
-myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..] 
+ 
 
 myLayout = avoidStruts (tiled ||| Mirror tiled ||| Full)
   where
