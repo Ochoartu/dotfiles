@@ -54,7 +54,7 @@ myStartupHook = do
     spawnOnce "nitrogen --restore"
     spawnOnce "/usr/bin/emacs --daemon"
 
-myWorkspaces = ["un","deux","trois","quatre","cinq","six"]
+myWorkspaces = ["un","deux","trois","quatre","cinq","six","sept","huit","neuf"]
  
 
 myLayout = avoidStruts (tiled ||| Mirror tiled ||| Full)
