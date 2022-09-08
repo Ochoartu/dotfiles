@@ -12,6 +12,7 @@ import XMonad.Util.Loggers
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.NamedActions
 
+import XMonad.Hooks.WindowSwallowing
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
@@ -36,6 +37,7 @@ myConfig = def
     , layoutHook = spacingWithEdge 10  myLayout
     , terminal = myTerminal 
     , borderWidth = 6
+    , handleEventHook = swallowEventHook (className =? "kitty" <||> className =? "st") (return True)
     , workspaces = myWorkspaces
     , normalBorderColor = "#800080"
     , focusedBorderColor = "#FF00FF"
