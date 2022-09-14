@@ -39,8 +39,8 @@ myConfig = def
     , borderWidth = 6
     , handleEventHook = swallowEventHook (className =? "kitty" <||> className =? "st") (return True)
     , workspaces = myWorkspaces
-    , normalBorderColor = "#800080"
-    , focusedBorderColor = "#FF00FF"
+    , normalBorderColor = "#C0FC90"
+    , focusedBorderColor = "#6DBB30"
     , logHook = dynamicLogString ppThree >>= xmonadPropLog
     , startupHook = myStartupHook
     , manageHook = namedScratchpadManageHook scratchpads
@@ -86,7 +86,7 @@ ppBottomTwo = def
 
 ppThree :: PP
 ppThree = def
-  { ppSep             = magenta " • "
+  { ppSep             = green " • "
     , ppTitleSanitize   = xmobarStrip
     , ppCurrent         = wrap " " "" . xmobarBorder "Top" "#8be9fd" 2
     , ppHidden          = white . wrap " " ""
@@ -96,17 +96,17 @@ ppThree = def
     , ppExtras          = [logTitles formatFocused formatUnfocused]
     }
   where
-    formatFocused   = wrap (white    "[") (white    "]") . magenta . ppWindow
-    formatUnfocused = wrap (lowWhite "[") (lowWhite "]") . blue    . ppWindow
+    formatFocused   = wrap (white    "[") (white    "]") . green   . ppWindow
+    formatUnfocused = wrap (lowWhite "[") (lowWhite "]") . darkerGreen    . ppWindow
 
     -- | Windows should have *some* title, which should not not exceed a
     -- sane length.
     ppWindow :: String -> String
     ppWindow = xmobarRaw . (\w -> if null w then "untitled" else w) . shorten 30
 
-    blue, lowWhite, magenta, red, white, yellow :: String -> String
-    magenta  = xmobarColor "#ff79c6" ""
-    blue     = xmobarColor "#bd93f9" ""
+    darkerGreen, lowWhite, green, red, white, yellow :: String -> String
+    green    = xmobarColor "#C0FC90" ""
+    darkerGreen = xmobarColor "#34640F" ""
     white    = xmobarColor "#f8f8f2" ""
     yellow   = xmobarColor "#f1fa8c" ""
     red      = xmobarColor "#ff5555" ""
@@ -114,7 +114,7 @@ ppThree = def
 
 ppBottomThree :: PP
 ppBottomThree = def
-  { ppSep             = magenta " • "
+  { ppSep             = green " • "
     , ppTitleSanitize   = xmobarStrip
     , ppCurrent         = wrap " " "" . xmobarBorder "Bottom" "#8be9fd" 2
     , ppHidden          = white . wrap " " ""
@@ -124,17 +124,17 @@ ppBottomThree = def
     , ppExtras          = [logTitles formatFocused formatUnfocused]
     }
   where
-    formatFocused   = wrap (white    "[") (white    "]") . magenta . ppWindow
-    formatUnfocused = wrap (lowWhite "[") (lowWhite "]") . blue    . ppWindow
+    formatFocused   = wrap (white    "[") (white    "]") . green   . ppWindow
+    formatUnfocused = wrap (lowWhite "[") (lowWhite "]") . darkerGreen    . ppWindow
 
     -- | Windows should have *some* title, which should not not exceed a
     -- sane length.
     ppWindow :: String -> String
     ppWindow = xmobarRaw . (\w -> if null w then "untitled" else w) . shorten 30
 
-    blue, lowWhite, magenta, red, white, yellow :: String -> String
-    magenta  = xmobarColor "#ff79c6" ""
-    blue     = xmobarColor "#bd93f9" ""
+    darkerGreen, lowWhite, green, red, white, yellow :: String -> String
+    green    = xmobarColor "#C0FC90" ""
+    darkerGreen = xmobarColor "#34640F" ""
     white    = xmobarColor "#f8f8f2" ""
     yellow   = xmobarColor "#f1fa8c" ""
     red      = xmobarColor "#ff5555" ""
@@ -143,54 +143,54 @@ ppBottomThree = def
 scratchpads :: NamedScratchpads
 scratchpads = [ NS "terminal" spawnTerm findTerm manageTerm
               , NS "arandr"  spawnArandr findArandr manageArandr 
-	      , NS "nitrogen" spawnNitrogen findNitrogen manageNitrogen
-	      , NS "calculator" spawnCalc findCalc manageCalc
-	      , NS "music" spawnMusic findMusic manageMusic]
+              , NS "nitrogen" spawnNitrogen findNitrogen manageNitrogen
+              , NS "calculator" spawnCalc findCalc manageCalc
+              , NS "music" spawnMusic findMusic manageMusic]
   where
   spawnTerm = "st" ++ " -n scratchpad"
   findTerm  = resource =? "scratchpad"
   manageTerm = customFloating $ F.RationalRect l t w h
              where
-	     h = 0.5
-	     w = 0.4
-	     t = 0.75 -h
-	     l = 0.70 -w
+             h = 0.5
+             w = 0.4
+             t = 0.75 -h
+             l = 0.70 -w
 
   spawnArandr = "arandr"
   findArandr = className =? "Arandr"
   manageArandr = customFloating $ F.RationalRect l t w h
              where
-	     h = 0.5
-	     w = 0.4
-	     t = 0.75 -h
-	     l = 0.70 -w
+             h = 0.5
+             w = 0.4
+             t = 0.75 -h
+             l = 0.70 -w
 
   spawnNitrogen = "nitrogen"
   findNitrogen = className =? "Nitrogen"
   manageNitrogen = customFloating $ F.RationalRect l t w h
              where 
-	     h = 0.5
-	     w = 0.4
-	     t = 0.75 -h
-	     l = 0.70 -w
+             h = 0.5
+             w = 0.4
+             t = 0.75 -h
+             l = 0.70 -w
 
   spawnCalc = "qalculate-gtk"
   findCalc = className =? "Qalculate-gtk"
   manageCalc = customFloating $ F.RationalRect l t w h
              where
-	     h = 0.5
-	     w = 0.4
-	     t = 0.75 -h
-	     l = 0.70 -w
+             h = 0.5
+             w = 0.4
+             t = 0.75 -h
+             l = 0.70 -w
 
   spawnMusic = "cider"
   findMusic = className =? "Cider"
   manageMusic = customFloating $ F.RationalRect l t w h
              where
-	     h = 0.5
-	     w = 0.4
-	     t = 0.75 -h
-	     l = 0.70 -w
+             h = 0.5
+             w = 0.4
+             t = 0.75 -h
+             l = 0.70 -w
 
 myKeys :: XConfig l0 -> [((KeyMask,KeySym), NamedAction)]
 myKeys c = (subtitle "Custom Keys":) $ mkNamedKeymap c $
