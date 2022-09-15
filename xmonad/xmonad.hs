@@ -96,8 +96,8 @@ ppThree = def
     , ppExtras          = [logTitles formatFocused formatUnfocused]
     }
   where
-    formatFocused   = wrap (white    "[") (white    "]") . green   . ppWindow
-    formatUnfocused = wrap (lowWhite "[") (lowWhite "]") . darkerGreen    . ppWindow
+    formatFocused   = wrap (white    "\57520") (white    "\57521") . green   . ppWindow
+    formatUnfocused = wrap (lowWhite "\57520") (lowWhite "\57521") . darkerGreen    . ppWindow
 
     -- | Windows should have *some* title, which should not not exceed a
     -- sane length.
@@ -124,8 +124,8 @@ ppBottomThree = def
     , ppExtras          = [logTitles formatFocused formatUnfocused]
     }
   where
-    formatFocused   = wrap (white    "[") (white    "]") . green   . ppWindow
-    formatUnfocused = wrap (lowWhite "[") (lowWhite "]") . darkerGreen    . ppWindow
+    formatFocused   = wrap (white    "\57520") (white    "\57521") . green   . ppWindow
+    formatUnfocused = wrap (lowWhite "\57520") (lowWhite "\57521") . darkerGreen    . ppWindow
 
     -- | Windows should have *some* title, which should not not exceed a
     -- sane length.

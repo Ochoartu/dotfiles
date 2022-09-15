@@ -1,0 +1,51 @@
+Config { font = "xft:PowerlineSymbols:size14:style=medium:antialias=true, Arimo for Powerline:size=14:antialias=true, mononoki Nerd Font:size=14:antialias=true , FontAwesome:size=14:antialias=true"
+       , additionalFonts = []
+       , borderColor = "black"
+       , border = TopB
+       , bgColor = "black"
+       , fgColor = "grey"
+       , alpha = 255
+       , position = Top
+       , lowerOnStart = True
+       , pickBroadest = False
+       , persistent = False
+       , hideOnStart = False
+       , iconRoot = "."
+       , allDesktops = True
+       , overrideRedirect = True
+       , commands = [ Run Weather "EGPF" ["-t","<station>: <tempC>C",
+                                          "-L","18","-H","25",
+                                          "--normal","green",
+                                          "--high","red",
+                                          "--low","lightblue"] 36000
+                    , Run Network "eth0" ["-L","0","-H","32",
+                                          "--normal","green","--high","red"] 10
+                    , Run Network "eth1" ["-L","0","-H","32",
+                                          "--normal","green","--high","red"] 10
+                    , Run Cpu ["-L","3","-H","50",
+                               "--normal","green","--high","red"] 10
+                    , Run Memory ["-t","Mem: <usedratio>%"] 10
+                    , Run Swap [] 10
+                    , Run Com "uname" ["-s","-r"] "" 36000
+                    , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
+        , Run BatteryN ["BAT0"]
+         [ "-t", "<acstatus> "
+         , "-S", "Off", "-d", "0", "-m", "3"
+         , "-L", "10", "-H", "90", "-p", "3"
+         , "-W", "0"
+         , "-f", "\xf244\xf243\xf243\xf243\xf242\xf242\xf242\xf241\xf241\xf240"
+         , "--"
+         , "-P"
+         , "-a", "notify-send -u critical 'Battery running out!!!!!!'"
+         , "-A", "5"
+         , "-i", "<fn=1>\xf1e6   </fn>"
+         , "-O", "<fn=1><leftbar>  \xfba3</fn> <timeleft>"
+         , "-o", "<fn=1><leftbar>      </fn> <timeleft>"
+         , "-H", "10", "-L", "7"
+         ] 70 "batt0" 
+                    ]
+       , sepChar = "%"
+       , alignSep = "}{"
+       , template = " %batt0%    }\
+                    \{ %cpu% "
+       }
